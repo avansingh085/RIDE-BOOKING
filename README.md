@@ -51,7 +51,7 @@
 
 - **Node.js**
 - **Express.js**
-- **MongoDB** (not shown in code but assumed)
+- **MongoDB** 
 - **JWT** for authentication
 - **CORS** for cross-origin requests
 
