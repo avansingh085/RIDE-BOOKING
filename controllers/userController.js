@@ -1,47 +1,41 @@
-// controllers/userController.js
 import User from '../models/User.js';
-import Payment from '../models/Payment.js'
-// Get user by ID
-export const getUserById = async (req, res) => {
-  try {
-   
-    const user = await User.findById(req.user.userId).select('-password').populate('payments').populate('bookings');
-    if (!user) return res.status(404).json({ message: 'User not found' });
-    res.json(user);
-  } catch (error) {
-    console.log(error)
-    res.status(500).json({ message: 'Server error' });
-  }
-};
+import asyncError from '../middilewares/errorHand/asyncHandler.js';
+import AppError from '../utils/error/AppError.js';
 
-// Update user by ID
-export const updateUser = async (req, res) => {
-  try {
-    
-    const { name, phone, location, preferences, avatarUrl } = req.body;
+//  Get user by ID
+export const getUserById = asyncError(async (req, res) => {
+  const user = await User.findById(req.user.userId)
+    .select('-password')
+    .populate('payments')
+    .populate('bookings');
 
-    const updatedUser = await User.findByIdAndUpdate(
-      req.user.userId,
-      { name, phone, location, preferences, avatarUrl },
-      { new: true, runValidators: true }
-    ).select('-password').populate('payments').populate('bookings');
+  if (!user) throw new AppError('User not found', 404);
 
-    if (!updatedUser) return res.status(404).json({ message: 'User not found' });
+  res.status(200).json(user);
+});
 
-    res.json(updatedUser);
-  } catch (error) {
-    res.status(400).json({ message: 'Invalid data or server error' });
-  }
-};
+//  Update user by ID
+export const updateUser = asyncError(async (req, res) => {
+  const { name, phone, location, preferences, avatarUrl } = req.body;
 
-// Delete user by ID
-export const deleteUser = async (req, res) => {
-  try {
-    const deletedUser = await User.findByIdAndDelete(req.user.userId);
-    if (!deletedUser) return res.status(404).json({ message: 'User not found' });
-    res.json({ message: 'User deleted successfully' });
-  } catch (error) {
-    res.status(500).json({ message: 'Server error' });
-  }
-};
+  const updatedUser = await User.findByIdAndUpdate(
+    req.user.userId,
+    { name, phone, location, preferences, avatarUrl },
+    { new: true, runValidators: true }
+  )
+    .select('-password')
+    .populate('payments')
+    .populate('bookings');
 
+  if (!updatedUser) throw new AppError('User not found', 404);
+
+  res.status(200).json(updatedUser);
+});
+
+//  Delete user by ID
+export const deleteUser = asyncError(async (req, res) => {
+  const deletedUser = await User.findByIdAndDelete(req.user.userId);
+  if (!deletedUser) throw new AppError('User not found', 404);
+
+  res.status(200).json({ message: 'User deleted successfully' });
+});
