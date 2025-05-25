@@ -33,14 +33,14 @@ const bookingSchema = new Schema({
     default: 'upcoming'
   },
   price: {
-    type: String,
+    type: Number,
     required: true
   },
   duration: {
-    type: String,
+    type: Number,
     required: true
   }
 }, { timestamps: true });
 
-const Booking=mongoose.model('Booking', bookingSchema);
+const Booking = mongoose.model('Booking', bookingSchema);
 export default Booking;

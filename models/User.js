@@ -54,6 +54,10 @@ const userSchema = new mongoose.Schema({
       type: String,
       default: 'Standard',
     },
+     darkMode: {
+      type: Boolean,
+      default: false,
+    },
   }
 }, {
   timestamps: true

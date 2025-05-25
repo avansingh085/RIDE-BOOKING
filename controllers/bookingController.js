@@ -105,8 +105,8 @@ export const bookBike = asyncError(async (req, res) => {
     paymentId: newPayment._id.toString(),
     pickupTime: start,
     dropoffTime: end,
-    duration: `${totalHours} hours`,
-    price: `₹${totalPrice}`,
+    duration: totalHours,
+    price: totalPrice,
     location,
   });
   await newBooking.save();
