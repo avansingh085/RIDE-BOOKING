@@ -4,10 +4,13 @@ import {
   getAllReviews,
   getReviewById,
   updateReview,
-  deleteReview
+  deleteReview,
+  getRandomReviews
 } from '../controllers/reviewController.js';
 import verifyToken from '../middilewares/auth/verifyToken.js';
+
 const router = express.Router();
+router.get('/random/:size',getRandomReviews);
 router.post('/',verifyToken, createReview);
 router.get('/',verifyToken, getAllReviews);
 router.get('/:id',verifyToken, getReviewById);

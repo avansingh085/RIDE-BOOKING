@@ -56,6 +56,14 @@ const bikeSchema = new mongoose.Schema({
     required: true,
     min: 0,
   },
+  duration:{
+    type:String,
+    default:""
+  },
+  brand:{
+    type:String,
+    default:""
+  },
   rating: {
     type: Number,
     default: 0,

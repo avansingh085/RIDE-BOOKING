@@ -1,7 +1,6 @@
 import asyncError from '../middilewares/errorHand/asyncHandler.js';
 import Message from "../models/Message.js";
 
-
 // @route  POST /api/messages
 export const addNewMessage = asyncError(async (req, res) => {
   const newMessage = await Message.create(req.body);

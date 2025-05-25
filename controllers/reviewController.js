@@ -15,6 +15,12 @@ export const getAllReviews = asyncError(async (req, res) => {
   res.status(200).json(reviews);
 });
 
+// Get 3 random reviews
+export const getRandomReviews = asyncError(async (req, res) => {
+  const reviews = await Review.aggregate([{ $sample: { size: parseInt(req.params.size) } }]);
+  res.status(200).json(reviews);
+});
+
 //  Get a single review by ID
 export const getReviewById = asyncError(async (req, res) => {
   const review = await Review.findById(req.params.id);
