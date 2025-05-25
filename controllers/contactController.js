@@ -22,7 +22,6 @@ export const getAllMessages = asyncError(async (req, res) => {
   });
 });
 
-
 // @route  GET /api/messages/:id
 export const getMessageById = asyncError(async (req, res) => {
   const message = await Message.findById(req.params.id);
