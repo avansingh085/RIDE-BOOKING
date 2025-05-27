@@ -32,12 +32,14 @@ export const getBikeById = asyncError(async (req, res) => {
 
 // Update a bike
 export const updateBike = asyncError(async (req, res) => {
+
   const bike = await Bike.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true,
   });
   if (!bike) throw new AppError('Bike not found', 404);
   res.status(200).json(createResponse(req, bike));
+
 });
 
 // Delete a bike

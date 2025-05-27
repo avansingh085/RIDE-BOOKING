@@ -1,6 +1,6 @@
 
 import asyncError from "../middilewares/errorHand/asyncHandler.js";
-import { uploadCloudinary } from "../services/uploadcloudinary.js";
+import { uploadCloudinary } from "../services/uploadCloudinary.js";
 import AppError from "../utils/error/AppError.js";
 export const uploadImage = asyncError(async (req, res, next) => {
     // console.log("File received for upload:");

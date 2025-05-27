@@ -8,5 +8,6 @@ export const {
     EMAIL_PASS,
     API_SECRET_CLOUDINARY,
     API_KEY_CLOUDINARY,
-    CLOUD_NAME
+    CLOUD_NAME,
+    FRONTEND_URL
 } = process.env;

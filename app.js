@@ -2,7 +2,7 @@
 import express from 'express';
 import cors from 'cors';
 import errorHandler from './middilewares/errorHand/errorHandler.js';
-
+import { FRONTEND_URL } from './config/server-config.js';
 import authRoute from './routes/authRoute.js';
 import userRoute from './routes/userRoute.js';
 import bikeRoute from './routes/bikeRoute.js';
@@ -10,10 +10,11 @@ import reviewRoute from './routes/reviewRoute.js';
 import bookingRoute from './routes/bookingRoute.js';
 import contactRoute from './routes/contactRoute.js'
 import uploadRoute from './routes/uploadRoute.js';
+
 const app = express();
 
 // Middleware: apply CORS before routes
-app.use(cors({ origin: '*', credentials: true }));
+app.use(cors({ origin: FRONTEND_URL, credentials: true }));
 
 // JSON parser
 app.use(express.json());

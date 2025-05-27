@@ -7,6 +7,7 @@ const bikeSchema = new mongoose.Schema({
     required: true,
     maxlength: 100,
   },
+
   model:{
     type:String,
     required:true,
