@@ -14,7 +14,7 @@ import uploadRoute from './routes/uploadRoute.js';
 const app = express();
 
 // Middleware: apply CORS before routes
-app.use(cors({ origin: '*', credentials: true }));
+app.use(cors({ origin: FRONTEND_URL, credentials: true }));
 
 // JSON parser
 app.use(express.json());
