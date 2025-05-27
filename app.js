@@ -9,6 +9,7 @@ import bikeRoute from './routes/bikeRoute.js';
 import reviewRoute from './routes/reviewRoute.js';
 import bookingRoute from './routes/bookingRoute.js';
 import contactRoute from './routes/contactRoute.js'
+import uploadRoute from './routes/uploadRoute.js';
 const app = express();
 
 // Middleware: apply CORS before routes
@@ -22,7 +23,8 @@ app.use('/api/user', userRoute);
 app.use('/api/bike', bikeRoute);
 app.use('/api/review', reviewRoute);
 app.use('/api/booking', bookingRoute);
-app.use('/api/contact',contactRoute)
+app.use('/api/contact',contactRoute);
+app.use('/api/upload',uploadRoute)
 
 
 
