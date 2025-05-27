@@ -27,7 +27,7 @@ export const checkAvailability = asyncError(async (req, res,next) => {
 });
 
 // Book a bike
-export const bookBike = asyncError(async (req, res) => {
+export const bookBike = asyncError(async (req, res,next) => {
   const { bikeId, startTime, endTime, location } = req.body;
   const userId = req.user.userId;
 
@@ -53,7 +53,7 @@ export const bookBike = asyncError(async (req, res) => {
     store[bikeId] = store[bikeId].filter(slot =>
       slot.pickupTime !== startTime || slot.dropoffTime !== endTime
     );
-    throw new AppError('Invalid start or end time', 400);
+    return next(new AppError('Invalid start or end time', 400));
   }
 
   const user = await User.findById(userId);
