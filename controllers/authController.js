@@ -60,7 +60,7 @@ export const sendOTP = asyncError(async (req, res,next) => {
   try {
     const isExist=await User.find({email});
     
-     if (isExist) {
+     if (isExist?.length) {
     return next(new AppError('User already exists. Please use a different email.', 403));
   }
     await transporter.sendMail({

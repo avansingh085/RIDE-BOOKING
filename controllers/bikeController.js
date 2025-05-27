@@ -24,28 +24,28 @@ export const getAllBikes = asyncError(async (req, res) => {
 });
 
 // Get a single bike by ID
-export const getBikeById = asyncError(async (req, res) => {
+export const getBikeById = asyncError(async (req, res,next) => {
   const bike = await Bike.findById(req.params.id);
-  if (!bike) throw new AppError('Bike not found', 404);
+  if (!bike) next(new AppError('Bike not found', 404));
   res.status(200).json(createResponse(req, bike));
 });
 
 // Update a bike
-export const updateBike = asyncError(async (req, res) => {
+export const updateBike = asyncError(async (req, res,next) => {
 
   const bike = await Bike.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true,
   });
-  if (!bike) throw new AppError('Bike not found', 404);
+  if (!bike)next(new AppError('Bike not found', 404));
   res.status(200).json(createResponse(req, bike));
 
 });
 
 // Delete a bike
-export const deleteBike = asyncError(async (req, res) => {
+export const deleteBike = asyncError(async (req, res,next) => {
   const bike = await Bike.findByIdAndDelete(req.params.id);
-  if (!bike) throw new AppError('Bike not found', 404);
+  if (!bike) next(new AppError('Bike not found', 404));
   res.status(200).json(createResponse(req, { message: 'Bike deleted successfully' }));
 });
 

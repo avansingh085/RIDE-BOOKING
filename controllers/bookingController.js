@@ -9,13 +9,13 @@ import AppError from '../utils/error/AppError.js';
 const store = {};
 
 // Check bike availability
-export const checkAvailability = asyncError(async (req, res) => {
+export const checkAvailability = asyncError(async (req, res,next) => {
   const { bikeId, startTime, endTime } = req.body;
   const start = new Date(startTime);
   const end = new Date(endTime);
 
   if (isNaN(start) || isNaN(end) || end <= start) {
-    throw new AppError('Invalid start or end time', 400);
+    return next(new AppError('Invalid start or end time', 400));
   }
 
   const overlappingBooking = await Booking.findOne({
@@ -37,7 +37,7 @@ export const bookBike = asyncError(async (req, res) => {
       startTime < slot.dropoffTime && endTime > slot.pickupTime
     );
     if (conflict) {
-      throw new AppError('Temporary conflict — booking in progress. Try again soon.', 429);
+     return next(new AppError('Temporary conflict — booking in progress. Try again soon.', 429));
     }
   } else {
     store[bikeId] = [];
@@ -62,7 +62,7 @@ export const bookBike = asyncError(async (req, res) => {
     store[bikeId] = store[bikeId].filter(slot =>
       slot.pickupTime !== startTime || slot.dropoffTime !== endTime
     );
-    throw new AppError('Invalid user, please login', 404);
+    return next(new AppError('Invalid user, please login', 404));
   }
 
   const bike = await Bike.findById(bikeId);
@@ -71,7 +71,7 @@ export const bookBike = asyncError(async (req, res) => {
     store[bikeId] = store[bikeId].filter(slot =>
       slot.pickupTime !== startTime || slot.dropoffTime !== endTime
     );
-    throw new AppError('Bike not found', 404);
+    return next(new AppError('Bike not found', 404));
   }
 
   // Check overlapping bookings again before confirming
@@ -85,7 +85,7 @@ export const bookBike = asyncError(async (req, res) => {
     store[bikeId] = store[bikeId].filter(slot =>
       slot.pickupTime !== startTime || slot.dropoffTime !== endTime
     );
-    throw new AppError('Bike is not available during this period', 409);
+     return next(new AppError('Bike is not available during this period', 409));
   }
 
   // Calculate price and duration
