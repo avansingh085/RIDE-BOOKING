@@ -7,7 +7,7 @@ export const getUserById = asyncError(async (req, res) => {
   const user = await User.findById(req.user.userId)
     .select('-password')
     .populate('payments')
-    .populate('bookings');
+    .populate('bookings').lean();
 
   if (!user) throw new AppError('User not found', 404);
  const isAdmin=req?.isAdmin;
@@ -25,7 +25,7 @@ export const updateUser = asyncError(async (req, res) => {
   )
     .select('-password')
     .populate('payments')
-    .populate('bookings');
+    .populate('bookings').lean();
 
   if (!updatedUser) throw new AppError('User not found', 404);
   const isAdmin=req?.isAdmin;

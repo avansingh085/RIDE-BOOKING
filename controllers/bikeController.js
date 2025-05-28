@@ -19,13 +19,13 @@ export const createBike = asyncError(async (req, res) => {
 
 // Get all bikes
 export const getAllBikes = asyncError(async (req, res) => {
-  const bikes = await Bike.find();
+  const bikes = await Bike.find().lean();
   res.status(200).json(createResponse(req, bikes));
 });
 
 // Get a single bike by ID
 export const getBikeById = asyncError(async (req, res,next) => {
-  const bike = await Bike.findById(req.params.id);
+  const bike = await Bike.findById(req.params.id).lean();
   if (!bike) next(new AppError('Bike not found', 404));
   res.status(200).json(createResponse(req, bike));
 });
