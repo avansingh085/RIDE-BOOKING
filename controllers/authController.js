@@ -32,14 +32,14 @@ export const register = asyncError(async (req, res) => {
 
 export const login = asyncError(async (req, res) => {
   const { email, password } = req.body;
-
+ 
   const user = await User.findOne({ email }).select('+password');
   if (!user || !(await bcrypt.compare(password, user.password)))
     throw new AppError('Invalid credentials', 400);
 
   const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '7d' });
-
-  res.status(200).json({
+  
+  return res.status(200).json({
     message: 'Login successful',
     token,
     user: {

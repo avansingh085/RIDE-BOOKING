@@ -10,6 +10,7 @@ import reviewRoute from './routes/reviewRoute.js';
 import bookingRoute from './routes/bookingRoute.js';
 import contactRoute from './routes/contactRoute.js'
 import uploadRoute from './routes/uploadRoute.js';
+import AppError from './utils/error/AppError.js';
 
 const app = express();
 
@@ -26,7 +27,6 @@ app.use('/api/review', reviewRoute);
 app.use('/api/booking', bookingRoute);
 app.use('/api/contact',contactRoute);
 app.use('/api/upload',uploadRoute)
-
 
 
 //  Global Error Handler

@@ -10,8 +10,8 @@ export const getUserById = asyncError(async (req, res) => {
     .populate('bookings');
 
   if (!user) throw new AppError('User not found', 404);
-
-  res.status(200).json(user);
+ const isAdmin=req?.isAdmin;
+  res.status(200).json({...user,isAdmin});
 });
 
 //  Update user by ID
@@ -28,8 +28,8 @@ export const updateUser = asyncError(async (req, res) => {
     .populate('bookings');
 
   if (!updatedUser) throw new AppError('User not found', 404);
-
-  res.status(200).json(updatedUser);
+  const isAdmin=req?.isAdmin;
+  res.status(200).json({...updatedUser,isAdmin});
 });
 
 //  Delete user by ID
