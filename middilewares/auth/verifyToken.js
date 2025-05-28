@@ -1,8 +1,7 @@
 import jwt from 'jsonwebtoken';
-import { JWT_SECRET } from '../../config/server-config.js';
+import { ADMIN_EMAIL, JWT_SECRET } from '../../config/server-config.js';
 import asyncError from '../errorHand/asyncHandler.js';
 import AppError from '../../utils/error/AppError.js';
-
 const verifyToken = asyncError(async (req, res, next) => {
   const authHeader = req.headers.authorization;
 
