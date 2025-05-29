@@ -4,6 +4,8 @@ import Payment from "../models/Payment.js";
 import User from "../models/User.js";
 import asyncError from '../middilewares/errorHand/asyncHandler.js';
 import AppError from '../utils/error/AppError.js';
+import { emailBookingFormate } from "../services/emailFormate.js";
+import { FRONTEND_URL } from "../config/server-config.js";
 
 // In-memory temporary store to prevent overlapping concurrent bookings on same bike/time
 const store = {};
@@ -115,6 +117,12 @@ export const bookBike = asyncError(async (req, res,next) => {
   user.payments.push(newPayment._id);
   user.bookings.push(newBooking._id);
   await user.save();
+  await transporter.sendMail({
+  from: `"Drivee" <${EMAIL_USER}>`,
+  to: email,
+  subject: 'Your Drivee Booking Confirmation',
+  html:emailBookingFormate(newBooking._id,FRONTEND_URL),
+});
 
   // Remove the temporary booking lock
   store[bikeId] = store[bikeId].filter(slot =>
@@ -123,3 +131,10 @@ export const bookBike = asyncError(async (req, res,next) => {
 
   res.status(201).json({ message: 'Booking successful', available: true });
 });
+
+
+export const getAllBookings=asyncError(async (req,res)=>{
+   const allBooking=await Booking.find().lean();
+   return res.status(200).json(allBooking);
+
+})

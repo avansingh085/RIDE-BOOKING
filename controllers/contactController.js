@@ -3,6 +3,7 @@ import Message from "../models/Message.js";
 
 // @route  POST /api/messages
 export const addNewMessage = asyncError(async (req, res) => {
+ 
   const newMessage = await Message.create(req.body);
   res.status(201).json({
     success: true,
@@ -13,6 +14,7 @@ export const addNewMessage = asyncError(async (req, res) => {
 
 // @route  GET /api/message
 export const getAllMessages = asyncError(async (req, res) => {
+  
   const messages = await Message.find();
   res.status(200).json({
     success: true,
