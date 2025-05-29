@@ -4,7 +4,7 @@ import Payment from "../models/Payment.js";
 // @route GET /payments
 export const getAllPayments = async (req, res) => {
   try {
-    console.log("OPPPPPPPPPPPPPPPPPPP")
+   
     const payments = await Payment.find().sort({ createdAt: -1 });
     res.status(200).json(payments);
   } catch (err) {
