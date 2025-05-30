@@ -10,5 +10,8 @@ export const {
     API_KEY_CLOUDINARY,
     CLOUD_NAME,
     FRONTEND_URL,
-    ADMIN_EMAIL
+    ADMIN_EMAIL,
+    REDIS_PORT,
+    REDIS_ENDPOINT,
+    REDIS_PASS
 } = process.env;

@@ -1,42 +1,65 @@
 import User from '../models/User.js';
 import asyncError from '../middilewares/errorHand/asyncHandler.js';
 import AppError from '../utils/error/AppError.js';
+import client from '../services/redisServices.js';
 import Payment from '../models/Payment.js';
 
-//  Get user by ID
+// Get user by ID
 export const getUserById = asyncError(async (req, res) => {
-  const user = await User.findById(req.user.userId)
+  const userId = req.user.userId;
+
+  const cachedUser = await client.get(`user:${userId}`);
+  if (cachedUser) {
+    const user = JSON.parse(cachedUser);
+    const isAdmin = req?.isAdmin;
+    return res.status(200).json({ ...user, isAdmin });
+  }
+
+  const user = await User.findById(userId)
     .select('-password')
     .populate('payments')
-    .populate('bookings').lean();
+    .populate('bookings')
+    .lean();
 
   if (!user) throw new AppError('User not found', 404);
- const isAdmin=req?.isAdmin;
-  res.status(200).json({...user,isAdmin});
+
+  await client.set(`user:${userId}`, JSON.stringify(user), 'EX', 3600); // 1 hour cache
+
+  const isAdmin = req?.isAdmin;
+  res.status(200).json({ ...user, isAdmin });
 });
 
-//  Update user by ID
+// Update user by ID
 export const updateUser = asyncError(async (req, res) => {
   const { name, phone, location, preferences, avatarUrl } = req.body;
+  const userId = req.user.userId;
 
   const updatedUser = await User.findByIdAndUpdate(
-    req.user.userId,
+    userId,
     { name, phone, location, preferences, avatarUrl },
     { new: true, runValidators: true }
   )
     .select('-password')
     .populate('payments')
-    .populate('bookings').lean();
+    .populate('bookings')
+    .lean();
 
   if (!updatedUser) throw new AppError('User not found', 404);
-  const isAdmin=req?.isAdmin;
-  res.status(200).json({...updatedUser,isAdmin});
+
+  await client.set(`user:${userId}`, JSON.stringify(updatedUser), 'EX', 3600); // Update cache
+
+  const isAdmin = req?.isAdmin;
+  res.status(200).json({ ...updatedUser, isAdmin });
 });
 
-//  Delete user by ID
+// Delete user by ID
 export const deleteUser = asyncError(async (req, res) => {
-  const deletedUser = await User.findByIdAndDelete(req.user.userId);
+  const userId = req.user.userId;
+
+  const deletedUser = await User.findByIdAndDelete(userId);
   if (!deletedUser) throw new AppError('User not found', 404);
+
+  await client.del(`user:${userId}`); // Clear cache
 
   res.status(200).json({ message: 'User deleted successfully' });
 });

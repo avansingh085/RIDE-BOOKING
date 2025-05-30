@@ -7,6 +7,7 @@ import AppError from '../utils/error/AppError.js';
 import transporter from '../config/mailer-config.js';
 import otpService from '../services/otpService.js';
 import { emailOtpVerificationFormate } from '../services/emailFormate.js';
+import client from '../services/redisServices.js';
 
 export const register = asyncError(async (req, res) => {
   const { name, email, password } = req.body;
@@ -18,6 +19,7 @@ export const register = asyncError(async (req, res) => {
   const newUser = await User.create({ name, email, password: hashedPassword });
 
   const token = jwt.sign({ userId: newUser._id }, JWT_SECRET, { expiresIn: '7d' });
+  
   await transporter.sendMail({
     from: `"Drivee" <${EMAIL_USER}>`,
     to: email,
