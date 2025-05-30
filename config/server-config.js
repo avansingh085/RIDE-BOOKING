@@ -13,5 +13,7 @@ export const {
     ADMIN_EMAIL,
     REDIS_PORT,
     REDIS_ENDPOINT,
-    REDIS_PASS
+    REDIS_PASS,
+    GOOGLE_CLIENT_ID,
+    GOOGLE_CLIENT_SECRET,
 } = process.env;

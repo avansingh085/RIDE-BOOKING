@@ -18,7 +18,10 @@ const app = express();
 // Middleware: apply CORS before routes
 app.use(cors({ origin: FRONTEND_URL, credentials: true }));
 
-// JSON parser
+
+//  Global Error Handler
+app.use(errorHandler);
+
 app.use(express.json());
 
 app.use('/api/auth', authRoute);
@@ -29,7 +32,7 @@ app.use('/api/booking', bookingRoute);
 app.use('/api/contact',contactRoute);
 app.use('/api/upload',uploadRoute)
 app.use('/api/payments',paymentRoute)
-//  Global Error Handler
-app.use(errorHandler);
+
+
 
 export default app;

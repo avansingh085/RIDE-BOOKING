@@ -8,12 +8,12 @@ import Payment from '../models/Payment.js';
 export const getUserById = asyncError(async (req, res) => {
   const userId = req.user.userId;
 
-  const cachedUser = await client.get(`user:${userId}`);
-  if (cachedUser) {
-    const user = JSON.parse(cachedUser);
-    const isAdmin = req?.isAdmin;
-    return res.status(200).json({ ...user, isAdmin });
-  }
+  // const cachedUser = await client.get(`user:${userId}`);
+  // if (cachedUser) {
+  //   const user = JSON.parse(cachedUser);
+  //   const isAdmin = req?.isAdmin;
+  //   return res.status(200).json({ ...user, isAdmin });
+  // }
 
   const user = await User.findById(userId)
     .select('-password')
@@ -23,7 +23,7 @@ export const getUserById = asyncError(async (req, res) => {
 
   if (!user) throw new AppError('User not found', 404);
 
-  await client.set(`user:${userId}`, JSON.stringify(user), 'EX', 3600); // 1 hour cache
+  // await client.set(`user:${userId}`, JSON.stringify(user), 'EX', 3600); // 1 hour cache
 
   const isAdmin = req?.isAdmin;
   res.status(200).json({ ...user, isAdmin });
@@ -46,7 +46,7 @@ export const updateUser = asyncError(async (req, res) => {
 
   if (!updatedUser) throw new AppError('User not found', 404);
 
-  await client.set(`user:${userId}`, JSON.stringify(updatedUser), 'EX', 3600); // Update cache
+  // await client.set(`user:${userId}`, JSON.stringify(updatedUser), 'EX', 3600); // Update cache
 
   const isAdmin = req?.isAdmin;
   res.status(200).json({ ...updatedUser, isAdmin });
@@ -59,7 +59,7 @@ export const deleteUser = asyncError(async (req, res) => {
   const deletedUser = await User.findByIdAndDelete(userId);
   if (!deletedUser) throw new AppError('User not found', 404);
 
-  await client.del(`user:${userId}`); // Clear cache
+  // await client.del(`user:${userId}`); // Clear cache
 
   res.status(200).json({ message: 'User deleted successfully' });
 });

@@ -5,8 +5,8 @@ import User from "../models/User.js";
 import asyncError from '../middilewares/errorHand/asyncHandler.js';
 import AppError from '../utils/error/AppError.js';
 import { emailBookingFormate } from "../services/emailFormate.js";
-import { FRONTEND_URL } from "../config/server-config.js";
-
+import { EMAIL_USER, FRONTEND_URL } from "../config/server-config.js";
+import transporter from "../config/mailer-config.js";
 // In-memory temporary store to prevent overlapping concurrent bookings on same bike/time
 const store = {};
 
@@ -119,7 +119,7 @@ export const bookBike = asyncError(async (req, res,next) => {
   await user.save();
   await transporter.sendMail({
   from: `"Drivee" <${EMAIL_USER}>`,
-  to: email,
+  to: user.email,
   subject: 'Your Drivee Booking Confirmation',
   html:emailBookingFormate(newBooking._id,FRONTEND_URL),
 });
